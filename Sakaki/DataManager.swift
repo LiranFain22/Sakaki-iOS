@@ -1,10 +1,3 @@
-//
-//  DataManager.swift
-//  Sakaki
-//
-//  Created by Liran Fainshtein on 09/06/2023.
-//
-
 import SwiftUI
 import Firebase
 
@@ -44,16 +37,6 @@ class DataManager: ObservableObject {
                     let bin = Bin(id: id, binName: binName, imageURL: imageURL, lastUpdate: lastUpdate, latitude: latitude, longitude: longitude, status: status)
                     self.bins.append(bin)
                 }
-            }
-        }
-    }
-    
-    func addDog(dogBreed: String) {
-        let db = Firestore.firestore()
-        let ref = db.collection("Dogs").document()
-        ref.setData(["breed": dogBreed, "id": 10]) { error in
-            if let error = error {
-                print(error.localizedDescription)
             }
         }
     }
