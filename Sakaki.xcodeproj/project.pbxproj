@@ -23,6 +23,7 @@
 		1DAD15282A330472004538C2 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAD15272A330472004538C2 /* ListView.swift */; };
 		1DAD152C2A33058D004538C2 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAD152B2A33058D004538C2 /* DataManager.swift */; };
 		1DC752632A335DD000C8DB08 /* Bin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC752622A335DD000C8DB08 /* Bin.swift */; };
+		1DFF9F052A40974900F34E4A /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFF9F042A40974900F34E4A /* helper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		1DAD15272A330472004538C2 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		1DAD152B2A33058D004538C2 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		1DC752622A335DD000C8DB08 /* Bin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bin.swift; sourceTree = "<group>"; };
+		1DFF9F042A40974900F34E4A /* helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = helper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				1D0FF98E2A3242FF0087BA0C /* SakakiApp.swift */,
 				1D0FF9902A3242FF0087BA0C /* LoginView.swift */,
 				1DAD15272A330472004538C2 /* ListView.swift */,
+				1DFF9F042A40974900F34E4A /* helper.swift */,
 				1D1C59442A3F134200F3B05F /* LocationManager.swift */,
 				1D84B3612A3B2F2A00DB0F50 /* MapView.swift */,
 				1DC752622A335DD000C8DB08 /* Bin.swift */,
@@ -182,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DFF9F052A40974900F34E4A /* helper.swift in Sources */,
 				1D84B3622A3B2F2A00DB0F50 /* MapView.swift in Sources */,
 				1DAD15282A330472004538C2 /* ListView.swift in Sources */,
 				1DAD152C2A33058D004538C2 /* DataManager.swift in Sources */,

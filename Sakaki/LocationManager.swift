@@ -1,36 +1,74 @@
 import CoreLocation
 import MapKit
 
+enum MapDetails {
+    static let startingLocation = CLLocationCoordinate2D(latitude: 32.067303, longitude: 34.804041)
+    static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.01)
+    static let zooming = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001)
+}
+
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
-    private let locationManager = CLLocationManager()
     
-    @Published var location: CLLocation? = nil
+    var locationManager: CLLocationManager?
     
-    override init() {
-        super.init()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    @Published var location: CLLocation?
+    @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation, span: MapDetails.defaultSpan)
+    
+    func checkIfLocationServicesIsEnable() {
+        DispatchQueue.global(qos: .background).async {
+            if CLLocationManager.locationServicesEnabled() {
+                DispatchQueue.main.async {
+                    self.locationManager = CLLocationManager()
+                    self.locationManager?.delegate = self
+                }
+            } else {
+                DispatchQueue.main.async {
+                    Helper.showAlert(title: "Error", message: "Your location services are off. Please turn them on to use the application correctly.")
+                }
+            }
+        }
+    }
+
+    
+    func requestAllowOnceLocationPermission() {
+        locationManager?.requestLocation()
     }
     
-    func requestLocation() {
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
+    private func checkLocationAuthorization() {
+        guard let locationManager = locationManager else { return }
+        
+        switch locationManager.authorizationStatus {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted:
+            Helper.showAlert(title: "Error ", message: "Your location is restricted likely due to parental controls.")
+        case .denied:
+            Helper.showAlert(title: "Error ", message: "You have denied this app location permission. Go into settings to change it.")
+        case .authorizedAlways, .authorizedWhenInUse:
+            region = MKCoordinateRegion(center: locationManager.location!.coordinate, span: MapDetails.defaultSpan)
+        @unknown default:
+            Helper.showAlert(title: "Error ", message: "Error.. something went wrong.")
+        }
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        checkLocationAuthorization()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            self.location = location
-        } else {
-            print("Error with didUpdateLocations function")
+        guard let latestLocation = locations.first else {
+            Helper.showAlert(title: "Error ", message: "Error.. something went wrong.")
             return
+        }
+        
+        DispatchQueue.main.async {
+            let updatedRegion = MKCoordinateRegion(center: latestLocation.coordinate, span: MapDetails.zooming)
+            self.region = updatedRegion
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        Helper.showAlert(title: "Error ", message: "Can't get current location")
         print("Location manager error: \(error.localizedDescription)")
-    }
-    
-    func requestAllowOnceLocationPermission() {
-        locationManager.requestLocation()
     }
 }

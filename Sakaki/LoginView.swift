@@ -15,7 +15,8 @@ struct LoginView: View {
         if userIsLoggedIn {
             ListView(userIsLoggedIn: $userIsLoggedIn)
         } else {
-            startScreen
+            ListView(userIsLoggedIn: $userIsLoggedIn)
+//            startScreen
         }
     }
     

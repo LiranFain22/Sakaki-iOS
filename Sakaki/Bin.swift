@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Bin: Identifiable, Equatable {
+struct Bin: Identifiable {
     var id: String
     var binName: String
     var imageURL: String
