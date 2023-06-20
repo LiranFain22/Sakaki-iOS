@@ -2,30 +2,42 @@ import SwiftUI
 import URLImage
 import MapKit
 import Firebase
+import CoreLocationUI
 
 struct ListView: View {
-    @EnvironmentObject var dataManager: DataManager
     @StateObject private var locationManager = LocationManager()
+    @EnvironmentObject var dataManager: DataManager
+    
     @Binding var userIsLoggedIn: Bool
     
     @State private var showBinDetails = false
-    @State private var selectedBin: Bin?
-    @State private var showAlert = false
-    @State private var alertMessage = ""
     @State private var currentLocation: CLLocation?
+    @State private var selectedBin: Bin?
+    @State private var isBinSelectedToRoute = false
+    @State private var isCurrentLocationPressed = false
+    @State private var userName = Firebase.Auth.auth().currentUser?.displayName
     
     var body: some View {
         NavigationView {
             VStack {
                 HStack {
-                    Text("Stations")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding()
-                        .foregroundColor(.white)
+                    
+                    VStack(alignment: .leading) {
+                        Text("Stations")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding()
+                            .foregroundColor(.white)
+                        
+                        Text("\(Helper.greetingsBaseTimeOfDay()) \(userName ?? "Friend")")
+                            .font(.title3)
+                            .bold()
+                            .padding()
+                            .foregroundColor(.white)
+                    }
                     
                     Spacer()
-
+                    
                     Button {
                         do {
                             try Auth.auth().signOut()
@@ -34,37 +46,60 @@ struct ListView: View {
                                 userIsLoggedIn = false
                             }
                         } catch let signOutError as NSError {
-                            showAlert = true
-                            alertMessage = "Error signing out: \(signOutError.localizedDescription)"
+                            Helper.showAlert(title: "Error", message: signOutError.localizedDescription)
                         }
                     } label: {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                             .foregroundColor(.white)
                     }
                     .padding()
-                    .alert(isPresented: $showAlert) {
-                        Alert(
-                            title: Text("Sign Out Error"),
-                            message: Text(alertMessage),
-                            dismissButton: .default(Text("OK"))
-                        )
-                    }
-                    
+                    .offset(y: -30)
                 }
                 
-                MapView(selectedBin: $selectedBin, locationManager: locationManager)
+                ZStack {
+                    MapView(locationManager: locationManager,
+                            selectedBin: $selectedBin,
+                            isBinSelectedToRoute: $isBinSelectedToRoute,
+                            isCurrentLocationPressed:$isCurrentLocationPressed)
+                        .environmentObject(dataManager)
+                        .padding(10)
+                    
+                    VStack {
+                        Spacer()
+                        
+                        HStack {
+                            Spacer()
+                            
+                            LocationButton(.currentLocation) {
+                                locationManager.checkIfLocationServicesIsEnable()
+                                isCurrentLocationPressed = true
+                            }
+                            
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                            .labelStyle(.iconOnly)
+                            .symbolVariant(.fill)
+                            
+                            .padding(.trailing, 20)
+                            .padding(.bottom, 20)
+                        }
+                    }
+                }
                 
                 List(dataManager.bins, id: \.id) { bin in
                     HStack {
                         Text(bin.binName)
                             .onTapGesture {
                                 selectedBin = bin
+                                isCurrentLocationPressed = false
                             }
                         
                         Spacer()
                         
                         Button(action: {
                             showBinDetails = true
+                            selectedBin = bin
+                            isCurrentLocationPressed = false
                         }) {
                             Image(systemName: "info.circle")
                         }
@@ -72,14 +107,13 @@ struct ListView: View {
                         .padding(.all)
                     }
                 }
-//                .foregroundColor(.green)
             }
             .background(Color(0x7FB77E))
             .sheet(isPresented: $showBinDetails) {
                 if let bin = selectedBin {
-                    BinDetailsView(bin: bin)
+                    BinDetailsView(bin: bin, isBinSelected: $isBinSelectedToRoute)
                 } else {
-                    Text("No bin selected") // Show a default view or message
+                    BinDetailsView(bin: dataManager.bins.first!, isBinSelected: $isBinSelectedToRoute)
                 }
             }
         }
@@ -89,45 +123,93 @@ struct ListView: View {
 struct BinDetailsView: View {
     var bin: Bin
     
+    @Binding var isBinSelected: Bool
+    
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack {
             
-            HStack {
-                Text(bin.binName)
-                    .font(.title)
-                    .padding()
-                
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .foregroundColor(.red)
-                }
+            Text(bin.binName)
+                .font(.largeTitle)
                 .padding()
-            }
             
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Status: \(bin.status)")
-                Text("Last Update: \(formattedDate(bin.lastUpdate))")
+            VStack(spacing: 10) {
                 URLImage(URL(string: bin.imageURL)!) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                }
+                Divider()
+                HStack {
+                    Text("Status: ")
+                        .bold()
+                    Spacer()
+                    Text(bin.status)
+                }
+                Divider()
+                HStack {
+                    Text("Last Update: ")
+                        .bold()
+                    Spacer()
+                    Text(Helper.formattedDate(bin.lastUpdate))
+                }
+                Divider()
+                VStack {
+                    Button {
+                        isBinSelected.toggle()
+                    } label: {
+                        Text("Update Station")
+                            .font(.title2)
+                            .padding()
+                        Image(systemName: "newspaper")
+                            .font(.title2)
+                            .padding()
+                    }
+                    .foregroundColor(.white)
+                    .background(.green)
+                    .cornerRadius(20)
+                    
+                    Divider()
+                    
+                    HStack {
+                        Button {
+                            isBinSelected.toggle()
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Text("Route")
+                                .font(.title2)
+                                .padding()
+                            Image(systemName: "arrow.triangle.turn.up.right.diamond")
+                                .font(.title2)
+                                .padding()
+                        }
+                        .foregroundColor(.white)
+                        .background(.blue)
+                        .cornerRadius(20)
+                        
+                        Spacer()
+                        
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Text("Return")
+                                .font(.title2)
+                                .padding()
+                            Image(systemName: "return")
+                                .font(.title2)
+                                .padding()
+                        }
+                        .foregroundColor(.white)
+                        .background(.red)
+                        .cornerRadius(20)
+                    }
                 }
             }
             .padding()
             
             Spacer()
         }
-    }
-    
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
     }
 }
 

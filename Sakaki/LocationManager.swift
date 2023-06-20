@@ -2,8 +2,8 @@ import CoreLocation
 import MapKit
 
 enum MapDetails {
-    static let startingLocation = CLLocationCoordinate2D(latitude: 32.067303, longitude: 34.804041)
-    static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.01)
+    static let startingLocation = CLLocationCoordinate2D(latitude: 32.113235, longitude: 34.818031)
+    static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
     static let zooming = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001)
 }
 
@@ -13,6 +13,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     @Published var location: CLLocation?
     @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation, span: MapDetails.defaultSpan)
+    
+    var userLocation: CLLocation?
     
     func checkIfLocationServicesIsEnable() {
         DispatchQueue.global(qos: .background).async {
@@ -38,14 +40,21 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         guard let locationManager = locationManager else { return }
         
         switch locationManager.authorizationStatus {
+            
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
+            
         case .restricted:
             Helper.showAlert(title: "Error ", message: "Your location is restricted likely due to parental controls.")
+            
         case .denied:
             Helper.showAlert(title: "Error ", message: "You have denied this app location permission. Go into settings to change it.")
+            
         case .authorizedAlways, .authorizedWhenInUse:
             region = MKCoordinateRegion(center: locationManager.location!.coordinate, span: MapDetails.defaultSpan)
+            // Save the user's current location
+            self.userLocation = locationManager.location
+            
         @unknown default:
             Helper.showAlert(title: "Error ", message: "Error.. something went wrong.")
         }
@@ -63,7 +72,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         DispatchQueue.main.async {
             let updatedRegion = MKCoordinateRegion(center: latestLocation.coordinate, span: MapDetails.zooming)
+            self.location = latestLocation
             self.region = updatedRegion
+            
+            // Save the user's current location
+            self.userLocation = latestLocation
         }
     }
     

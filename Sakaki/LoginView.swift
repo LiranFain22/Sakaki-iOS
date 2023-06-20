@@ -16,6 +16,9 @@ struct LoginView: View {
             ListView(userIsLoggedIn: $userIsLoggedIn)
         } else {
             ListView(userIsLoggedIn: $userIsLoggedIn)
+                .onAppear {
+                    locationManager.checkIfLocationServicesIsEnable()
+                }
 //            startScreen
         }
     }

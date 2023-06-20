@@ -1,10 +1,3 @@
-//
-//  bin.swift
-//  Sakaki
-//
-//  Created by Liran Fainshtein on 09/06/2023.
-//
-
 import SwiftUI
 
 struct Bin: Identifiable {
