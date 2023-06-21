@@ -125,7 +125,11 @@ struct BinDetailsView: View {
     
     @Binding var isBinSelected: Bool
     
+    @EnvironmentObject var dataManager: DataManager
     @Environment(\.presentationMode) var presentationMode
+    
+    @State private var isActionSheetPresented = false
+    @State private var showAlert = false
     
     var body: some View {
         VStack {
@@ -157,7 +161,7 @@ struct BinDetailsView: View {
                 Divider()
                 VStack {
                     Button {
-                        isBinSelected.toggle()
+                        isActionSheetPresented = true
                     } label: {
                         Text("Update Station")
                             .font(.title2)
@@ -169,6 +173,7 @@ struct BinDetailsView: View {
                     .foregroundColor(.white)
                     .background(.green)
                     .cornerRadius(20)
+                    
                     
                     Divider()
                     
@@ -210,6 +215,28 @@ struct BinDetailsView: View {
             
             Spacer()
         }
+        .actionSheet(isPresented: $isActionSheetPresented) {
+            ActionSheet(title: Text("Select Status"), buttons: [
+                .default(Text("Full")) {
+                    updateBinStatus(status: "Full")
+                },
+                .default(Text("Half Full")) {
+                    updateBinStatus(status: "Half Full")
+                },
+                .default(Text("Empty")) {
+                    updateBinStatus(status: "Empty")
+                },
+                .cancel()
+            ])
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Thank You 🙏🏻"), message: Text("Station updated successfully"), dismissButton: .default(Text("OK")))
+        }
+    }
+    
+    private func updateBinStatus(status: String) {
+        dataManager.updateBin(bin: bin, status: status)
+        showAlert = true
     }
 }
 
@@ -219,4 +246,3 @@ struct ListView_Previews: PreviewProvider {
             .environmentObject(DataManager())
     }
 }
-
