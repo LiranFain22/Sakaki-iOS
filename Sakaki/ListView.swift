@@ -121,7 +121,7 @@ struct ListView: View {
 }
 
 struct BinDetailsView: View {
-    var bin: Bin
+    @State var bin: Bin
     
     @Binding var isBinSelected: Bool
     
@@ -129,7 +129,6 @@ struct BinDetailsView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State private var isActionSheetPresented = false
-    @State private var showAlert = false
     
     var body: some View {
         VStack {
@@ -219,6 +218,7 @@ struct BinDetailsView: View {
             ActionSheet(title: Text("Select Status"), buttons: [
                 .default(Text("Full")) {
                     updateBinStatus(status: "Full")
+                    
                 },
                 .default(Text("Half Full")) {
                     updateBinStatus(status: "Half Full")
@@ -229,14 +229,14 @@ struct BinDetailsView: View {
                 .cancel()
             ])
         }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text("Thank You 🙏🏻"), message: Text("Station updated successfully"), dismissButton: .default(Text("OK")))
-        }
     }
     
     private func updateBinStatus(status: String) {
         dataManager.updateBin(bin: bin, status: status)
-        showAlert = true
+        
+        // Update the local bin object with the new status and last update
+        bin.status = status
+        bin.lastUpdate = Date.now
     }
 }
 
