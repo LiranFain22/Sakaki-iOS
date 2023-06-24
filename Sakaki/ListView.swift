@@ -11,6 +11,7 @@ struct ListView: View {
     @Binding var userIsLoggedIn: Bool
     
     @State private var showBinDetails = false
+    @State private var showUserDetails = false
     @State private var currentLocation: CLLocation?
     @State private var selectedBin: Bin?
     @State private var isBinSelectedToRoute = false
@@ -39,15 +40,15 @@ struct ListView: View {
                     Spacer()
                     
                     Button {
-                        do {
-                            try Auth.auth().signOut()
-                            Helper.showAlert(title: "Bye 👋🏻", message: "Hope to see you again ☺️") {
-                                // Return to LoginView
-                                userIsLoggedIn = false
-                            }
-                        } catch let signOutError as NSError {
-                            Helper.showAlert(title: "Error", message: signOutError.localizedDescription)
-                        }
+                        showUserDetails.toggle()
+                    } label: {
+                        Image(systemName: "person.circle.fill")
+                            .foregroundColor(.white)
+                    }
+                    .offset(y: -30)
+                    
+                    Button {
+                        showAlertBeforeSignOut()
                     } label: {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                             .foregroundColor(.white)
@@ -117,126 +118,36 @@ struct ListView: View {
                 }
             }
         }
-    }
-}
-
-struct BinDetailsView: View {
-    @State var bin: Bin
-    
-    @Binding var isBinSelected: Bool
-    
-    @EnvironmentObject var dataManager: DataManager
-    @Environment(\.presentationMode) var presentationMode
-    
-    @State private var isActionSheetPresented = false
-    
-    var body: some View {
-        VStack {
-            
-            Text(bin.binName)
-                .font(.largeTitle)
-                .padding()
-            
-            VStack(spacing: 10) {
-                URLImage(URL(string: bin.imageURL)!) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                }
-                Divider()
-                HStack {
-                    Text("Status: ")
-                        .bold()
-                    Spacer()
-                    Text(bin.status)
-                }
-                Divider()
-                HStack {
-                    Text("Last Update: ")
-                        .bold()
-                    Spacer()
-                    Text(Helper.formattedDate(bin.lastUpdate))
-                }
-                Divider()
-                VStack {
-                    Button {
-                        isActionSheetPresented = true
-                    } label: {
-                        Text("Update Station")
-                            .font(.title2)
-                            .padding()
-                        Image(systemName: "newspaper")
-                            .font(.title2)
-                            .padding()
-                    }
-                    .foregroundColor(.white)
-                    .background(.green)
-                    .cornerRadius(20)
-                    
-                    
-                    Divider()
-                    
-                    HStack {
-                        Button {
-                            isBinSelected.toggle()
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Text("Route")
-                                .font(.title2)
-                                .padding()
-                            Image(systemName: "arrow.triangle.turn.up.right.diamond")
-                                .font(.title2)
-                                .padding()
-                        }
-                        .foregroundColor(.white)
-                        .background(.blue)
-                        .cornerRadius(20)
-                        
-                        Spacer()
-                        
-                        Button {
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Text("Return")
-                                .font(.title2)
-                                .padding()
-                            Image(systemName: "return")
-                                .font(.title2)
-                                .padding()
-                        }
-                        .foregroundColor(.white)
-                        .background(.red)
-                        .cornerRadius(20)
-                    }
-                }
-            }
-            .padding()
-            
-            Spacer()
-        }
-        .actionSheet(isPresented: $isActionSheetPresented) {
-            ActionSheet(title: Text("Select Status"), buttons: [
-                .default(Text("Full")) {
-                    updateBinStatus(status: "Full")
-                    
-                },
-                .default(Text("Half Full")) {
-                    updateBinStatus(status: "Half Full")
-                },
-                .default(Text("Empty")) {
-                    updateBinStatus(status: "Empty")
-                },
-                .cancel()
-            ])
+        .sheet(isPresented: $showUserDetails) {
+            UserDetailsView()
         }
     }
     
-    private func updateBinStatus(status: String) {
-        dataManager.updateBin(bin: bin, status: status)
+    private func showAlertBeforeSignOut() {
+        let alert = UIAlertController(title: "Sign Out", message: "Are you sure you want to sign out?", preferredStyle: .alert)
         
-        // Update the local bin object with the new status and last update
-        bin.status = status
-        bin.lastUpdate = Date.now
+        alert.addAction(UIAlertAction(title: "Sign Out", style: .destructive, handler: { _ in
+            performSignOut()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let viewController = windowScene.windows.first?.rootViewController {
+            viewController.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    private func performSignOut() {
+        do {
+            try Auth.auth().signOut()
+            Helper.showAlert(title: "Bye 👋🏻", message: "Hope to see you again ☺️") {
+                // Return to LoginView
+                userIsLoggedIn = false
+            }
+        } catch let signOutError as NSError {
+            Helper.showAlert(title: "Error", message: signOutError.localizedDescription)
+        }
     }
 }
 

@@ -4,8 +4,11 @@ import Firebase
 class DataManager: ObservableObject {
     @Published var bins: [Bin] = []
     
+    @Published var userData: UserData?
+    
     init() {
         fetchBins()
+        fetchUserData()
     }
     
     func fetchBins() {
@@ -77,6 +80,47 @@ class DataManager: ObservableObject {
                 
                 // Publish the changes to trigger view update
                 self.objectWillChange.send()
+            }
+        }
+    }
+    
+    //MARK: - User Requests Functions
+    
+    
+    func createUserDocument(user: User) {
+        let db = Firestore.firestore()
+        let userDocument = db.collection("Users").document(user.uid)
+        userDocument.setData([
+            "email": user.email!,
+            "level": "Beginner",
+            "reportCount": 0,
+            "username": user.displayName!
+        ])
+    }
+    
+    func fetchUserData() {
+        let db = Firestore.firestore()
+        let userDocument = db.collection("Users").document(Auth.auth().currentUser!.uid)
+
+        userDocument.getDocument { snapshot, error in
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+
+            if let snapshot = snapshot, snapshot.exists {
+                let data = snapshot.data()
+
+                let email = data!["email"] as? String ?? ""
+                let username = data!["username"] as? String ?? ""
+                let level = data!["level"] as? String ?? ""
+                let reportCount = data!["reportCount"] as? Int ?? 0
+
+                let userData = UserData(email: email, username: username, level: level, reportCount: reportCount)
+
+                DispatchQueue.main.async {
+                    self.userData = userData
+                }
             }
         }
     }

@@ -10,19 +10,20 @@ struct LoginView: View {
     @State private var isLoginForm = true
     
     @StateObject private var locationManager = LocationManager()
+    @EnvironmentObject var dataManager: DataManager
     
     var body: some View {
         if userIsLoggedIn {
             ListView(userIsLoggedIn: $userIsLoggedIn)
         } else {
-//            startScreen
-//                .onAppear {
-//                    locationManager.checkIfLocationServicesIsEnable()
-//                }
-            ListView(userIsLoggedIn: $userIsLoggedIn)
+            startScreen
                 .onAppear {
                     locationManager.checkIfLocationServicesIsEnable()
                 }
+//            ListView(userIsLoggedIn: $userIsLoggedIn)
+//                .onAppear {
+//                    locationManager.checkIfLocationServicesIsEnable()
+//                }
         }
     }
     
@@ -181,14 +182,12 @@ struct LoginView: View {
                 showAlert(title: "Error", message: errorMessage)
             } else if let user = result?.user {
                 // Login successful
-                showAlert(title: "Login successful", message: "Welcom \(user.displayName ?? "Friend")!") {
+                showAlert(title: "Login successful", message: "Welcome \(user.displayName ?? "Friend")!") {
                     resetTextFields()
                     
-                    // Store authentication token or session object
-                    UserDefaults.standard.set(true, forKey: "IsLoggedIn")
-                    UserDefaults.standard.synchronize()
-                    
                     userIsLoggedIn = true // trigger navigation
+                    
+                    dataManager.fetchUserData()
                 }
                 
             } else {
@@ -227,6 +226,8 @@ struct LoginView: View {
                             isLoginForm = true // Switch back to login form
                             resetTextFields()
                         }
+                        
+                        dataManager.createUserDocument(user: user)
                     }
                 }
             } else {
@@ -275,5 +276,6 @@ struct LoginView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView()
+            .environmentObject(DataManager())
     }
 }
