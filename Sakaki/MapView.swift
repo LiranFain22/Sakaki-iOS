@@ -7,8 +7,10 @@ struct MapView: UIViewRepresentable {
     @StateObject var locationManager: LocationManager
     
     @Binding var selectedBin: Bin?
+    @Binding var selectedBinAnnotation: Bin?
     @Binding var isBinSelectedToRoute: Bool
     @Binding var isCurrentLocationPressed: Bool
+    @Binding var showBinDetails: Bool
     
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
@@ -144,9 +146,28 @@ struct MapView: UIViewRepresentable {
                     newAnnotationView.canShowCallout = true
                     return newAnnotationView
                 }
+            } else if annotation.title != "My Location" {
+                // Other annotations (bins)
+                let binAnnotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "BinAnnotationView")
+                binAnnotationView.canShowCallout = true
+                binAnnotationView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+                return binAnnotationView
             }
             
             return nil
+        }
+        
+        func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+            if control == view.rightCalloutAccessoryView {
+                if let binAnnotation = view.annotation as? MKPointAnnotation {
+                    let selectedBin = findBin(forBin: binAnnotation)
+                    parent.selectedBinAnnotation = selectedBin
+                    parent.selectedBin = selectedBin
+                    parent.isCurrentLocationPressed = false
+                    parent.isBinSelectedToRoute = false
+                    parent.showBinDetails = true
+                }
+            }
         }
         
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {

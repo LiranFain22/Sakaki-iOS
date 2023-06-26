@@ -1,10 +1,3 @@
-//
-//  BinDetailsView.swift
-//  Sakaki
-//
-//  Created by Liran Fainshtein on 22/06/2023.
-//
-
 import SwiftUI
 import URLImage
 import FirebaseAuth
@@ -12,7 +5,7 @@ import FirebaseAuth
 struct BinDetailsView: View {
     @State var bin: Bin
     
-    @Binding var isBinSelected: Bool
+    @Binding var isBinSelectedToRoute: Bool
     
     @EnvironmentObject var dataManager: DataManager
     @Environment(\.presentationMode) var presentationMode
@@ -70,7 +63,7 @@ struct BinDetailsView: View {
                     
                     HStack {
                         Button {
-                            isBinSelected.toggle()
+                            isBinSelectedToRoute.toggle()
                             presentationMode.wrappedValue.dismiss()
                         } label: {
                             Text("Route")

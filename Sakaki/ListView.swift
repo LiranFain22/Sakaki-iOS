@@ -12,8 +12,9 @@ struct ListView: View {
     
     @State private var showBinDetails = false
     @State private var showUserDetails = false
-    @State private var currentLocation: CLLocation?
     @State private var selectedBin: Bin?
+    @State private var selectedBinBTN: Bin?
+    @State private var selectedBinAnnotation: Bin?
     @State private var isBinSelectedToRoute = false
     @State private var isCurrentLocationPressed = false
     @State private var userName = Firebase.Auth.auth().currentUser?.displayName
@@ -60,10 +61,15 @@ struct ListView: View {
                 ZStack {
                     MapView(locationManager: locationManager,
                             selectedBin: $selectedBin,
+                            selectedBinAnnotation: $selectedBinAnnotation,
                             isBinSelectedToRoute: $isBinSelectedToRoute,
-                            isCurrentLocationPressed:$isCurrentLocationPressed)
+                            isCurrentLocationPressed:$isCurrentLocationPressed,
+                            showBinDetails: $showBinDetails)
                         .environmentObject(dataManager)
                         .padding(10)
+                        .sheet(item: $selectedBinAnnotation) { bin in
+                            BinDetailsView(bin: bin, isBinSelectedToRoute: $isBinSelectedToRoute)
+                        }
 
                     
                     VStack {
@@ -96,18 +102,21 @@ struct ListView: View {
                                     selectedBin = bin
                                     isCurrentLocationPressed = false
                                 }
-                            
+
                             Spacer()
-                            
+
                             Button(action: {
-                                selectedBin = bin
-                                showBinDetails = true
+                                selectedBinBTN = bin
                                 isCurrentLocationPressed = false
+                                showBinDetails = true
                             }) {
                                 Image(systemName: "info.circle")
                             }
                             .foregroundColor(.blue)
                             .padding(.all)
+                            .sheet(item: $selectedBinBTN) { bin in
+                                BinDetailsView(bin: bin, isBinSelectedToRoute: $isBinSelectedToRoute)
+                            }
                         }
                     }
                 } else {
@@ -118,35 +127,29 @@ struct ListView: View {
                                     selectedBin = bin
                                     isCurrentLocationPressed = false
                                 }
-                            
+
                             Spacer()
-                            
+
                             Button(action: {
-                                selectedBin = bin
-                                showBinDetails = true
+                                selectedBinBTN = bin
                                 isCurrentLocationPressed = false
+                                showBinDetails = true
                             }) {
                                 Image(systemName: "info.circle")
                             }
                             .foregroundColor(.blue)
                             .padding(.all)
+                            .sheet(item: $selectedBinBTN) { bin in
+                                BinDetailsView(bin: bin, isBinSelectedToRoute: $isBinSelectedToRoute)
+                            }
                         }
                     }
                 }
             }
             .background(Color(0x7FB77E))
-            .sheet(isPresented: $showBinDetails) {
-                if let bin = selectedBin {
-                    BinDetailsView(bin: bin, isBinSelected: $isBinSelectedToRoute)
-                } else {
-                    BinDetailsView(bin: dataManager.bins.first!, isBinSelected: $isBinSelectedToRoute)
-                }
-            }
-        }
-        .sheet(isPresented: $showUserDetails) {
-            UserDetailsView()
         }
     }
+    
     
     private func showAlertBeforeSignOut() {
         let alert = UIAlertController(title: "Sign Out", message: "Are you sure you want to sign out?", preferredStyle: .alert)
