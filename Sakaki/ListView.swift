@@ -64,6 +64,7 @@ struct ListView: View {
                             isCurrentLocationPressed:$isCurrentLocationPressed)
                         .environmentObject(dataManager)
                         .padding(10)
+
                     
                     VStack {
                         Spacer()
@@ -87,25 +88,49 @@ struct ListView: View {
                     }
                 }
                 
-                List(dataManager.bins, id: \.id) { bin in
-                    HStack {
-                        Text(bin.binName)
-                            .onTapGesture {
+                if let userLocation = locationManager.userLocation {
+                    List(dataManager.fetchNearbyBins(userLocation: userLocation , radius: 500), id: \.id) { bin in
+                        HStack {
+                            Text(bin.binName)
+                                .onTapGesture {
+                                    selectedBin = bin
+                                    isCurrentLocationPressed = false
+                                }
+                            
+                            Spacer()
+                            
+                            Button(action: {
                                 selectedBin = bin
+                                showBinDetails = true
                                 isCurrentLocationPressed = false
+                            }) {
+                                Image(systemName: "info.circle")
                             }
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            showBinDetails = true
-                            selectedBin = bin
-                            isCurrentLocationPressed = false
-                        }) {
-                            Image(systemName: "info.circle")
+                            .foregroundColor(.blue)
+                            .padding(.all)
                         }
-                        .foregroundColor(.blue)
-                        .padding(.all)
+                    }
+                } else {
+                    List(dataManager.bins, id: \.id) { bin in
+                        HStack {
+                            Text(bin.binName)
+                                .onTapGesture {
+                                    selectedBin = bin
+                                    isCurrentLocationPressed = false
+                                }
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                selectedBin = bin
+                                showBinDetails = true
+                                isCurrentLocationPressed = false
+                            }) {
+                                Image(systemName: "info.circle")
+                            }
+                            .foregroundColor(.blue)
+                            .padding(.all)
+                        }
                     }
                 }
             }
@@ -148,12 +173,5 @@ struct ListView: View {
         } catch let signOutError as NSError {
             Helper.showAlert(title: "Error", message: signOutError.localizedDescription)
         }
-    }
-}
-
-struct ListView_Previews: PreviewProvider {
-    static var previews: some View {
-        ListView(userIsLoggedIn: .constant(true))
-            .environmentObject(DataManager())
     }
 }

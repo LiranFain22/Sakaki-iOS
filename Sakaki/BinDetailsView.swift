@@ -7,6 +7,7 @@
 
 import SwiftUI
 import URLImage
+import FirebaseAuth
 
 struct BinDetailsView: View {
     @State var bin: Bin
@@ -109,13 +110,15 @@ struct BinDetailsView: View {
             ActionSheet(title: Text("Select Status"), buttons: [
                 .default(Text("Full")) {
                     updateBinStatus(status: "Full")
-                    
+                    updateUserData() // update user's number of reports
                 },
                 .default(Text("Half Full")) {
                     updateBinStatus(status: "Half Full")
+                    updateUserData() // update user's number of reports
                 },
                 .default(Text("Empty")) {
                     updateBinStatus(status: "Empty")
+                    updateUserData() // update user's number of reports
                 },
                 .cancel()
             ])
@@ -128,5 +131,19 @@ struct BinDetailsView: View {
         // Update the local bin object with the new status and last update
         bin.status = status
         bin.lastUpdate = Date.now
+    }
+    
+    private func updateUserData() {
+        if let user = Auth.auth().currentUser {
+            if let userData = dataManager.userData {
+                dataManager.updateUserReportCount(user: user, userData: userData)
+            } else {
+                print("Error - Can't get userData (updateUserData function)")
+                Helper.showAlert(title: "Error", message: "Something went wrong...")
+            }
+        } else {
+            print("Error - Can't get user from FirebaseAuth (updateUserData function)")
+            Helper.showAlert(title: "Error", message: "Something went wrong...")
+        }
     }
 }

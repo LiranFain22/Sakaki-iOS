@@ -1,5 +1,6 @@
 import SwiftUI
 import Firebase
+import MapKit
 
 class DataManager: ObservableObject {
     @Published var bins: [Bin] = []
@@ -42,6 +43,17 @@ class DataManager: ObservableObject {
                 }
             }
         }
+    }
+    
+    func fetchNearbyBins(userLocation: CLLocation, radius: CLLocationDistance) -> [Bin] {
+        // Filter bins within the specified radius
+        let nearbyBins = bins.filter { bin in
+            let binLocation = CLLocation(latitude: bin.latitude, longitude: bin.longitude)
+            let distance = userLocation.distance(from: binLocation)
+            return distance <= radius
+        }
+        
+        return nearbyBins
     }
     
     func addBin(binName: String, imageURL: String, latitude: Double, longitude: Double, status: String) {
@@ -121,6 +133,50 @@ class DataManager: ObservableObject {
                 DispatchQueue.main.async {
                     self.userData = userData
                 }
+            }
+        }
+    }
+    
+    func updateUserReportCount(user: User, userData: UserData) {
+        let db = Firestore.firestore()
+        let userDocument = db.collection("Users").document(user.uid)
+        
+        let updatedReportCount = userData.reportCount + 1
+        var nextLevel = ""
+        
+        for level in UserLevelMap.keys {
+            if updatedReportCount == level {
+                nextLevel = UserLevelMap[level]!
+            }
+        }
+        
+        
+        // If user level up, then update level and reportCount
+        if nextLevel != "" {
+            userDocument.updateData([
+                "reportCount": updatedReportCount,
+                "level": nextLevel
+            ])
+            
+            // Update userData
+            DispatchQueue.main.async {
+                self.userData = UserData(email: userData.email, username: userData.username, level: nextLevel, reportCount: updatedReportCount)
+                
+                // Publish the changes to trigger view update
+                self.objectWillChange.send()
+            }
+        } else {
+            // Otherwise, just update reportCount
+            userDocument.updateData([
+                "reportCount": updatedReportCount
+            ])
+            
+            // Update userData
+            DispatchQueue.main.async {
+                self.userData = UserData(email: userData.email, username: userData.username, level: userData.level, reportCount: updatedReportCount)
+                
+                // Publish the changes to trigger view update
+                self.objectWillChange.send()
             }
         }
     }

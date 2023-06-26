@@ -25,6 +25,7 @@
 		1DAD15262A330183004538C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1DAD15252A330183004538C2 /* GoogleService-Info.plist */; };
 		1DAD15282A330472004538C2 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAD15272A330472004538C2 /* ListView.swift */; };
 		1DAD152C2A33058D004538C2 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAD152B2A33058D004538C2 /* DataManager.swift */; };
+		1DB357842A4866D000B8527F /* BinAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB357832A4866D000B8527F /* BinAnnotation.swift */; };
 		1DC752632A335DD000C8DB08 /* Bin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC752622A335DD000C8DB08 /* Bin.swift */; };
 		1DFF9F052A40974900F34E4A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFF9F042A40974900F34E4A /* Helper.swift */; };
 /* End PBXBuildFile section */
@@ -45,6 +46,7 @@
 		1DAD15252A330183004538C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1DAD15272A330472004538C2 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		1DAD152B2A33058D004538C2 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		1DB357832A4866D000B8527F /* BinAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinAnnotation.swift; sourceTree = "<group>"; };
 		1DC752622A335DD000C8DB08 /* Bin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bin.swift; sourceTree = "<group>"; };
 		1DFF9F042A40974900F34E4A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -92,6 +94,7 @@
 				1DFF9F042A40974900F34E4A /* Helper.swift */,
 				1D1C59442A3F134200F3B05F /* LocationManager.swift */,
 				1D84B3612A3B2F2A00DB0F50 /* MapView.swift */,
+				1DB357832A4866D000B8527F /* BinAnnotation.swift */,
 				1DC752622A335DD000C8DB08 /* Bin.swift */,
 				1DAD152B2A33058D004538C2 /* DataManager.swift */,
 				1DA4BA442A45989300378374 /* UserData.swift */,
@@ -203,6 +206,7 @@
 				1DA4BA452A45989300378374 /* UserData.swift in Sources */,
 				1D36B2D22A446DA300F4BF6F /* BinDetailsView.swift in Sources */,
 				1D1C59452A3F134200F3B05F /* LocationManager.swift in Sources */,
+				1DB357842A4866D000B8527F /* BinAnnotation.swift in Sources */,
 				1D0FF98F2A3242FF0087BA0C /* SakakiApp.swift in Sources */,
 				1DC752632A335DD000C8DB08 /* Bin.swift in Sources */,
 				1D0FF99D2A324CF90087BA0C /* Extentions.swift in Sources */,
@@ -342,6 +346,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -376,6 +381,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
