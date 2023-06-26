@@ -9,7 +9,6 @@ class DataManager: ObservableObject {
     
     init() {
         fetchBins()
-        fetchUserData()
     }
     
     func fetchBins() {

@@ -47,6 +47,9 @@ struct ListView: View {
                             .foregroundColor(.white)
                     }
                     .offset(y: -30)
+                    .sheet(isPresented: $showUserDetails) {
+                        UserDetailsView()
+                    }
                     
                     Button {
                         showAlertBeforeSignOut()
