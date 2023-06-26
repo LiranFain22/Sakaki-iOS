@@ -18,6 +18,7 @@
 		1D36B2D22A446DA300F4BF6F /* BinDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D36B2D12A446DA300F4BF6F /* BinDetailsView.swift */; };
 		1D36B2D42A446F9300F4BF6F /* UserDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D36B2D32A446F9300F4BF6F /* UserDetailsView.swift */; };
 		1D84B3622A3B2F2A00DB0F50 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D84B3612A3B2F2A00DB0F50 /* MapView.swift */; };
+		1DA456C82A49C5FF00AE2A90 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA456C72A49C5FF00AE2A90 /* ImagePicker.swift */; };
 		1DA4BA452A45989300378374 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA4BA442A45989300378374 /* UserData.swift */; };
 		1DAD15202A32FFC5004538C2 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1DAD151F2A32FFC5004538C2 /* FirebaseAuth */; };
 		1DAD15222A32FFC5004538C2 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 1DAD15212A32FFC5004538C2 /* FirebaseFirestore */; };
@@ -25,7 +26,6 @@
 		1DAD15262A330183004538C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1DAD15252A330183004538C2 /* GoogleService-Info.plist */; };
 		1DAD15282A330472004538C2 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAD15272A330472004538C2 /* ListView.swift */; };
 		1DAD152C2A33058D004538C2 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAD152B2A33058D004538C2 /* DataManager.swift */; };
-		1DB357842A4866D000B8527F /* BinAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB357832A4866D000B8527F /* BinAnnotation.swift */; };
 		1DC752632A335DD000C8DB08 /* Bin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC752622A335DD000C8DB08 /* Bin.swift */; };
 		1DFF9F052A40974900F34E4A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFF9F042A40974900F34E4A /* Helper.swift */; };
 /* End PBXBuildFile section */
@@ -42,11 +42,11 @@
 		1D36B2D12A446DA300F4BF6F /* BinDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinDetailsView.swift; sourceTree = "<group>"; };
 		1D36B2D32A446F9300F4BF6F /* UserDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsView.swift; sourceTree = "<group>"; };
 		1D84B3612A3B2F2A00DB0F50 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		1DA456C72A49C5FF00AE2A90 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		1DA4BA442A45989300378374 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		1DAD15252A330183004538C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1DAD15272A330472004538C2 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		1DAD152B2A33058D004538C2 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
-		1DB357832A4866D000B8527F /* BinAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinAnnotation.swift; sourceTree = "<group>"; };
 		1DC752622A335DD000C8DB08 /* Bin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bin.swift; sourceTree = "<group>"; };
 		1DFF9F042A40974900F34E4A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,7 +94,6 @@
 				1DFF9F042A40974900F34E4A /* Helper.swift */,
 				1D1C59442A3F134200F3B05F /* LocationManager.swift */,
 				1D84B3612A3B2F2A00DB0F50 /* MapView.swift */,
-				1DB357832A4866D000B8527F /* BinAnnotation.swift */,
 				1DC752622A335DD000C8DB08 /* Bin.swift */,
 				1DAD152B2A33058D004538C2 /* DataManager.swift */,
 				1DA4BA442A45989300378374 /* UserData.swift */,
@@ -103,6 +102,7 @@
 				1DAD15252A330183004538C2 /* GoogleService-Info.plist */,
 				1D0FF9942A3243000087BA0C /* Preview Content */,
 				1D36B2D12A446DA300F4BF6F /* BinDetailsView.swift */,
+				1DA456C72A49C5FF00AE2A90 /* ImagePicker.swift */,
 			);
 			path = Sakaki;
 			sourceTree = "<group>";
@@ -197,6 +197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DA456C82A49C5FF00AE2A90 /* ImagePicker.swift in Sources */,
 				1DFF9F052A40974900F34E4A /* Helper.swift in Sources */,
 				1D36B2D42A446F9300F4BF6F /* UserDetailsView.swift in Sources */,
 				1D84B3622A3B2F2A00DB0F50 /* MapView.swift in Sources */,
@@ -206,7 +207,6 @@
 				1DA4BA452A45989300378374 /* UserData.swift in Sources */,
 				1D36B2D22A446DA300F4BF6F /* BinDetailsView.swift in Sources */,
 				1D1C59452A3F134200F3B05F /* LocationManager.swift in Sources */,
-				1DB357842A4866D000B8527F /* BinAnnotation.swift in Sources */,
 				1D0FF98F2A3242FF0087BA0C /* SakakiApp.swift in Sources */,
 				1DC752632A335DD000C8DB08 /* Bin.swift in Sources */,
 				1D0FF99D2A324CF90087BA0C /* Extentions.swift in Sources */,
@@ -342,6 +342,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sakaki/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Sakaki to use your Camera to take picture of bin station";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to display nearby bins for waste disposal.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -377,6 +378,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sakaki/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Sakaki to use your Camera to take picture of bin station";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to display nearby bins for waste disposal.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

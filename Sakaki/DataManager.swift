@@ -73,7 +73,7 @@ class DataManager: ObservableObject {
         }
     }
     
-    func updateBin(bin: Bin, status: String) {
+    func updateBinStatus(bin: Bin, status: String) {
         let db = Firestore.firestore()
         let ref = db.collection("Bins").document(bin.id)
         ref.updateData([
@@ -86,6 +86,28 @@ class DataManager: ObservableObject {
                 // Update the bin's status in the local array
                 if let index = self.bins.firstIndex(where: { $0.id == bin.id }) {
                     self.bins[index].status = status
+                    self.bins[index].lastUpdate = Date.now
+                }
+                
+                // Publish the changes to trigger view update
+                self.objectWillChange.send()
+            }
+        }
+    }
+    
+    func updateBinPhoto(bin: Bin, imageURL: String) {
+        let db = Firestore.firestore()
+        let ref = db.collection("Bins").document(bin.id)
+        ref.updateData([
+            "imageURL": imageURL,
+            "lastUpdate": Timestamp(date: Date.now)
+        ]) { error in
+            if let error = error {
+                Helper.showAlert(title: "Error", message: error.localizedDescription)
+            } else {
+                // Update the bin's imageURL in the local array
+                if let index = self.bins.firstIndex(where: { $0.id == bin.id }) {
+                    self.bins[index].imageURL = imageURL
                     self.bins[index].lastUpdate = Date.now
                 }
                 
