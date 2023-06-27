@@ -4,6 +4,13 @@ import URLImage
 import FirebaseAuth
 import UIKit
 
+enum ActionSheetType: Identifiable {
+    case status
+    case camera
+    
+    var id: ActionSheetType { self }
+}
+
 struct BinDetailsView: View {
     @State var bin: Bin
     
@@ -12,12 +19,12 @@ struct BinDetailsView: View {
     @EnvironmentObject var dataManager: DataManager
     @Environment(\.presentationMode) var presentationMode
     
-    @State private var isActionSheetPresented = false
+    @State private var isUsingCamera = false
     @State private var isImageFullScreen = false
     @State private var isShowingImagePicker = false
-    @State private var isUsingCamera = false
-    @State private var cameraButtonPressed = false
+    @State private var uploadProgress: Double = 0.0
     @State private var selectedImage: UIImage?
+    @State private var actionSheetType: ActionSheetType?
     
     var body: some View {
         VStack {
@@ -27,19 +34,24 @@ struct BinDetailsView: View {
                 .padding()
             
             VStack(spacing: 10) {
-                Button {
+                URLImage(URL(string: bin.imageURL)!) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
+                .onTapGesture {
                     // Activate full screen image view
                     isImageFullScreen = true
-                } label: {
-                    URLImage(URL(string: bin.imageURL)!) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    }
                 }
                 .fullScreenCover(isPresented: $isImageFullScreen) {
                     // Full screen image view
                     ImageView(url: bin.imageURL, isImageFullScreen: $isImageFullScreen)
+                }
+                
+                if uploadProgress > 0.0 && uploadProgress < 100.0 {
+                    ProgressView(value: uploadProgress, total: 100.0)
+                        .progressViewStyle(LinearProgressViewStyle())
+                        .padding(.horizontal)
                 }
                 
                 Divider()
@@ -65,7 +77,7 @@ struct BinDetailsView: View {
                         Spacer()
                         
                         Button {
-                            isActionSheetPresented = true
+                            actionSheetType = ActionSheetType.status
                         } label: {
                             Image(systemName: "newspaper")
                                 .font(.title2)
@@ -95,7 +107,7 @@ struct BinDetailsView: View {
                         Spacer()
                         
                         Button {
-                            cameraButtonPressed = true
+                            actionSheetType = ActionSheetType.camera
                         } label: {
                             Image(systemName: "camera")
                                 .font(.title2)
@@ -130,38 +142,37 @@ struct BinDetailsView: View {
             
             Spacer()
         }
-        .sheet(isPresented: $isShowingImagePicker, onDismiss: loadImage) {
-            ImagePicker(selectedImage: $selectedImage, isUsingCamera: $isUsingCamera)
-        }
-        .actionSheet(isPresented: $isActionSheetPresented) {
-            ActionSheet(title: Text("Select Status"), buttons: [
-                .default(Text("Full")) {
-                    updateBinStatus(status: "Full")
-                    updateUserData() // update user's number of reports
-                },
-                .default(Text("Half Full")) {
-                    updateBinStatus(status: "Half Full")
-                    updateUserData() // update user's number of reports
-                },
-                .default(Text("Empty")) {
-                    updateBinStatus(status: "Empty")
-                    updateUserData() // update user's number of reports
-                },
-                .cancel()
-            ])
-        }
-        .actionSheet(isPresented: $cameraButtonPressed) {
-            ActionSheet(title: Text("Select Status"), buttons: [
-                .default(Text("Camera")) {
-                    isUsingCamera = true
-                    isShowingImagePicker = true
-                },
-                .default(Text("From Gallery")) {
-                    isUsingCamera = false
-                    isShowingImagePicker = true
-                },
-                .cancel()
-            ])
+        .actionSheet(item: $actionSheetType) { type in
+            switch type {
+            case .status:
+                return ActionSheet(title: Text("Select Status"), buttons: [
+                    .default(Text("Full")) {
+                        updateBinStatus(status: "Full")
+                        updateUserData()
+                    },
+                    .default(Text("Half Full")) {
+                        updateBinStatus(status: "Half Full")
+                        updateUserData()
+                    },
+                    .default(Text("Empty")) {
+                        updateBinStatus(status: "Empty")
+                        updateUserData()
+                    },
+                    .cancel()
+                ])
+            case .camera:
+                return ActionSheet(title: Text("Select Option"), buttons: [
+                    .default(Text("Camera")) {
+                        isUsingCamera = true
+                        isShowingImagePicker = true
+                    },
+                    .default(Text("From Gallery")) {
+                        isUsingCamera = false
+                        isShowingImagePicker = true
+                    },
+                    .cancel()
+                ])
+            }
         }
     }
     
@@ -200,11 +211,9 @@ struct BinDetailsView: View {
         // Create a unique filename for the image using a timestamp
         let filename = "\(UUID().uuidString).jpg"
         
-        // Create a reference to the Firebase Storage bucket and the desired storage location
         let storage = Storage.storage()
         let storageRef = storage.reference().child("images").child(filename)
         
-        // Create the metadata for the image
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
         
@@ -235,7 +244,9 @@ struct BinDetailsView: View {
         uploadTask.observe(.progress) { snapshot in
             guard let progress = snapshot.progress else { return }
             let percentComplete = Double(progress.completedUnitCount) / Double(progress.totalUnitCount) * 100.0
-            print("Upload progress: \(percentComplete)%")
+            
+            // Update the progress bar value
+            uploadProgress = percentComplete
         }
     }
 }

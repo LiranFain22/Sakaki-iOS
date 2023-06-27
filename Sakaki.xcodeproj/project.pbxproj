@@ -98,11 +98,11 @@
 				1DAD152B2A33058D004538C2 /* DataManager.swift */,
 				1DA4BA442A45989300378374 /* UserData.swift */,
 				1D0FF99C2A324CF90087BA0C /* Extentions.swift */,
+				1D36B2D12A446DA300F4BF6F /* BinDetailsView.swift */,
+				1DA456C72A49C5FF00AE2A90 /* ImagePicker.swift */,
 				1D0FF9922A3243000087BA0C /* Assets.xcassets */,
 				1DAD15252A330183004538C2 /* GoogleService-Info.plist */,
 				1D0FF9942A3243000087BA0C /* Preview Content */,
-				1D36B2D12A446DA300F4BF6F /* BinDetailsView.swift */,
-				1DA456C72A49C5FF00AE2A90 /* ImagePicker.swift */,
 			);
 			path = Sakaki;
 			sourceTree = "<group>";
