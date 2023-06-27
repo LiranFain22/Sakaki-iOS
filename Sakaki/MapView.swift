@@ -11,6 +11,8 @@ struct MapView: UIViewRepresentable {
     @Binding var isBinSelectedToRoute: Bool
     @Binding var isCurrentLocationPressed: Bool
     @Binding var showBinDetails: Bool
+    @Binding var showStopButton: Bool
+    @Binding var removeRoute: Bool
     
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
@@ -73,6 +75,12 @@ struct MapView: UIViewRepresentable {
         
         if isBinSelectedToRoute {
             setRoute(uiView)
+            showStopButton = true
+        }
+        
+        if removeRoute {
+            uiView.removeOverlays(uiView.overlays)
+            removeRoute = false
         }
         
     }
@@ -115,13 +123,17 @@ struct MapView: UIViewRepresentable {
             guard let route = response?.routes.first else { return }
             
             mapView.addAnnotations([currentLocationAnnotation, targetAnnotation])
-            mapView.addOverlay(route.polyline)
-            mapView.setVisibleMapRect(route.polyline.boundingMapRect,
-                                      edgePadding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
-                                      animated: true)
+            
+            // Check if distance is greater than 5 meters
+            if route.distance > 5 {
+                mapView.addOverlay(route.polyline)
+                mapView.setVisibleMapRect(route.polyline.boundingMapRect,
+                                          edgePadding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
+                                          animated: true)
+            }
         }
         
-        isBinSelectedToRoute = false
+//        isBinSelectedToRoute = false
     }
 
     

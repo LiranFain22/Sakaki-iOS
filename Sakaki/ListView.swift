@@ -12,6 +12,8 @@ struct ListView: View {
     
     @State private var showBinDetails = false
     @State private var showUserDetails = false
+    @State private var showStopButton = false
+    @State private var removeRoute = false
     @State private var selectedBin: Bin?
     @State private var selectedBinBTN: Bin?
     @State private var selectedBinAnnotation: Bin?
@@ -67,7 +69,9 @@ struct ListView: View {
                             selectedBinAnnotation: $selectedBinAnnotation,
                             isBinSelectedToRoute: $isBinSelectedToRoute,
                             isCurrentLocationPressed:$isCurrentLocationPressed,
-                            showBinDetails: $showBinDetails)
+                            showBinDetails: $showBinDetails,
+                            showStopButton: $showStopButton,
+                            removeRoute: $removeRoute)
                         .environmentObject(dataManager)
                         .padding(10)
                         .sheet(item: $selectedBinAnnotation) { bin in
@@ -81,16 +85,28 @@ struct ListView: View {
                         HStack {
                             Spacer()
                             
+                            Button {
+                                removeRoute = true
+                                showStopButton = false
+                            } label: {
+                                Image(systemName: "stop.fill")
+                                    .foregroundColor(.red)
+                                    .font(.largeTitle)
+                            }
+                            .cornerRadius(8)
+                            .padding(.trailing, 20)
+                            .padding(.bottom, 20)
+                            .opacity(showStopButton ? 1.0 : 0.0) // Hide the button if not shown
+                            
                             LocationButton(.currentLocation) {
                                 locationManager.checkIfLocationServicesIsEnable()
                                 isCurrentLocationPressed = true
+                                isBinSelectedToRoute = false
                             }
-                            
                             .foregroundColor(.white)
                             .cornerRadius(8)
                             .labelStyle(.iconOnly)
                             .symbolVariant(.fill)
-                            
                             .padding(.trailing, 20)
                             .padding(.bottom, 20)
                         }

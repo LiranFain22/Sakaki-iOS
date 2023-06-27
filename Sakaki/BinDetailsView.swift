@@ -142,6 +142,9 @@ struct BinDetailsView: View {
             
             Spacer()
         }
+        .sheet(isPresented: $isShowingImagePicker, onDismiss: loadImage) {
+            ImagePicker(selectedImage: $selectedImage, isUsingCamera: $isUsingCamera)
+        }
         .actionSheet(item: $actionSheetType) { type in
             switch type {
             case .status:
