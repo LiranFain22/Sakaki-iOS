@@ -86,6 +86,7 @@ struct ListView: View {
                             Spacer()
                             
                             Button {
+                                isBinSelectedToRoute = false
                                 removeRoute = true
                                 showStopButton = false
                             } label: {

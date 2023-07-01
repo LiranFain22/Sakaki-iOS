@@ -86,21 +86,13 @@
 		1D0FF98D2A3242FF0087BA0C /* Sakaki */ = {
 			isa = PBXGroup;
 			children = (
-				1D1C59462A3F1C5800F3B05F /* Info.plist */,
+				1DF33D752A4FF9CA00DA3445 /* Helpers */,
+				1DF33D742A4FF96300DA3445 /* Models */,
+				1DF33D762A4FFA0200DA3445 /* Views */,
+				1DF33D772A4FFA4B00DA3445 /* Managers */,
 				1D0FF98E2A3242FF0087BA0C /* SakakiApp.swift */,
-				1D0FF9902A3242FF0087BA0C /* LoginView.swift */,
-				1DAD15272A330472004538C2 /* ListView.swift */,
-				1D36B2D32A446F9300F4BF6F /* UserDetailsView.swift */,
-				1DFF9F042A40974900F34E4A /* Helper.swift */,
-				1D1C59442A3F134200F3B05F /* LocationManager.swift */,
-				1D84B3612A3B2F2A00DB0F50 /* MapView.swift */,
-				1DC752622A335DD000C8DB08 /* Bin.swift */,
-				1DAD152B2A33058D004538C2 /* DataManager.swift */,
-				1DA4BA442A45989300378374 /* UserData.swift */,
-				1D0FF99C2A324CF90087BA0C /* Extentions.swift */,
-				1D36B2D12A446DA300F4BF6F /* BinDetailsView.swift */,
-				1DA456C72A49C5FF00AE2A90 /* ImagePicker.swift */,
 				1D0FF9922A3243000087BA0C /* Assets.xcassets */,
+				1D1C59462A3F1C5800F3B05F /* Info.plist */,
 				1DAD15252A330183004538C2 /* GoogleService-Info.plist */,
 				1D0FF9942A3243000087BA0C /* Preview Content */,
 			);
@@ -113,6 +105,46 @@
 				1D0FF9952A3243000087BA0C /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		1DF33D742A4FF96300DA3445 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1DC752622A335DD000C8DB08 /* Bin.swift */,
+				1DA4BA442A45989300378374 /* UserData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1DF33D752A4FF9CA00DA3445 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				1DA456C72A49C5FF00AE2A90 /* ImagePicker.swift */,
+				1DFF9F042A40974900F34E4A /* Helper.swift */,
+				1D0FF99C2A324CF90087BA0C /* Extentions.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		1DF33D762A4FFA0200DA3445 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1D0FF9902A3242FF0087BA0C /* LoginView.swift */,
+				1DAD15272A330472004538C2 /* ListView.swift */,
+				1D36B2D32A446F9300F4BF6F /* UserDetailsView.swift */,
+				1D84B3612A3B2F2A00DB0F50 /* MapView.swift */,
+				1D36B2D12A446DA300F4BF6F /* BinDetailsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1DF33D772A4FFA4B00DA3445 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				1D1C59442A3F134200F3B05F /* LocationManager.swift */,
+				1DAD152B2A33058D004538C2 /* DataManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

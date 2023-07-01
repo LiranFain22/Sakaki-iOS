@@ -20,10 +20,6 @@ struct LoginView: View {
                 .onAppear {
                     locationManager.checkIfLocationServicesIsEnable()
                 }
-//            ListView(userIsLoggedIn: $userIsLoggedIn)
-//                .onAppear {
-//                    locationManager.checkIfLocationServicesIsEnable()
-//                }
         }
     }
     
@@ -58,6 +54,7 @@ struct LoginView: View {
                                 .foregroundColor(.white)
                                 .bold()
                         }
+                        .keyboardType(.emailAddress)
                     
                     Rectangle()
                         .frame(width: 350, height: 1)
@@ -86,6 +83,7 @@ struct LoginView: View {
                                 .foregroundColor(.white)
                                 .bold()
                         }
+                        .keyboardType(.emailAddress)
                     
                     Rectangle()
                         .frame(width: 350, height: 1)
@@ -246,7 +244,7 @@ struct LoginView: View {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-            completion?() // Execute the completion closure if provided
+            completion?()
         })
         
         topWindow.rootViewController?.present(alert, animated: true, completion: nil)
@@ -262,14 +260,6 @@ struct LoginView: View {
         email = ""
         password = ""
         username = ""
-    }
-    
-    func checkAuthentication() {
-        let isLoggedIn = UserDefaults.standard.bool(forKey: "IsLoggedIn")
-        if isLoggedIn {
-            // User is already logged in
-            userIsLoggedIn = true
-        }
     }
 }
 
