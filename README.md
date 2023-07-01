@@ -3,19 +3,31 @@
 
 ### Features
 - Secure login and registration using Firebase technology
+
+
 ![Firebase](https://github.com/LiranFain22/Sakaki-iOS/blob/main/Sakaki/Photos/LoginScreen.png)
 
 - Get bag stations based on iPhone location
+
+
 ![Location](https://github.com/LiranFain22/Sakaki-iOS/blob/main/Sakaki/Photos/CurrentLocation.png)
 
 - Convenient and easy-to-use navigation
+
+
 ![Navigation](https://github.com/LiranFain22/Sakaki-iOS/blob/main/Sakaki/Photos/Navigation.png)
 
-- Get details about the station in real time information
+- Get details about the station in real-time information
+
+
 ![BinDetails](https://github.com/LiranFain22/Sakaki-iOS/blob/main/Sakaki/Photos/BinDetails.png)
 
 - Update your position in an easy and convenient way
+
+
 ![Status](https://github.com/LiranFain22/Sakaki-iOS/blob/main/Sakaki/Photos/Update%20Status.png)
 
-- Upload a photo to the application by taking a photo from the camera or choosing a photo from the gallery
+- Upload a photo to the application by taking a shot from the camera or choosing an image from the gallery
+
+
 ![Camera](https://github.com/LiranFain22/Sakaki-iOS/blob/main/Sakaki/Photos/Upload%20Image.png)
