@@ -22,12 +22,12 @@
 
 ![BinDetails](https://github.com/LiranFain22/Sakaki-iOS/blob/main/Sakaki/Photos/BinDetails.png)
 
-- Update your position in an easy and convenient way
+- Update a station status in an easy and convenient way
 
 
 ![Status](https://github.com/LiranFain22/Sakaki-iOS/blob/main/Sakaki/Photos/Update%20Status.png)
 
-- Upload a photo to the application by taking a shot from the camera or choosing an image from the gallery
+- Upload a photo to the application by using the camera or choosing an image from the gallery
 
 
 ![Camera](https://github.com/LiranFain22/Sakaki-iOS/blob/main/Sakaki/Photos/Upload%20Image.png)
